@@ -1,63 +1,56 @@
 package com.example.udyogsathi.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
-import com.example.udyogsathi.item_view.UserItem
-import com.example.udyogsathi.viewmodel.SearchViewModel
-import com.google.firebase.auth.FirebaseAuth
+import com.example.udyogsathi.R
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
+
 
 @Composable
-fun Notification(navHostController:NavHostController){
+fun Notification(navHostController: NavHostController) {
+    val context = LocalContext.current
+    val mapView = remember { MapView(context) }
 
-    val searchViewModel : SearchViewModel = viewModel()
-    val userList by searchViewModel.usersList.observeAsState(null)
-
-    Column(modifier = Modifier
-        .background(Color.Black)
-        .fillMaxSize()) {
-
-        Text(
-            text = "Notifications", style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp,
-                color = Color.White
-            ), modifier = Modifier.padding(top = 20.dp, start = 20.dp)
-        )
-        Divider(modifier = Modifier.padding(top = 20.dp),color = Color.DarkGray, thickness = 0.3.dp)
-
-        LazyColumn{
-
-            val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-            if (userList != null && userList!!.isNotEmpty()){
-                val filterItems = userList
-                items(filterItems?: emptyList()){pairs ->
-
-                    UserItem(
-                        users = pairs,
-                        navHostController
-
-                    )
-                }
-
+    // Initialize Places
+    LaunchedEffect(Unit) {
+        try {
+            Places.initialize(context, context.getString(R.string.google_map_api_key))
+            mapView.onCreate(null) // Initialize the MapView
+            Log.d("MapView", "MapView initialized")
+            mapView.getMapAsync { googleMap ->
+                // Move the camera to Maharashtra, India
+                val maharashtraLatLng = LatLng(19.9964, 73.8567) // Coordinates for Maharashtra
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(maharashtraLatLng, 7f))
             }
+        } catch (e: Exception) {
+            Log.e("MapView", "Error initializing Places: ${e.message}")
         }
     }
+
+    // Ensure lifecycle management for the MapView
+    DisposableEffect(Unit) {
+        onDispose {
+            // Clean up the MapView lifecycle
+            mapView.onStop()
+            mapView.onPause()
+            mapView.onDestroy()
+        }
+    }
+
+    // Render the MapView within Compose
+    AndroidView(
+        factory = { mapView },
+        modifier = Modifier.fillMaxSize()
+    )
 }
