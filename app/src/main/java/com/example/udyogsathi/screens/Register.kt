@@ -54,6 +54,8 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.udyogsathi.R
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
 import com.example.udyogsathi.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,11 +102,11 @@ fun Register(navHostController: NavHostController){
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()){
 
-            isGranted : Boolean ->
+                isGranted : Boolean ->
             if (isGranted){
-
+                Toast.makeText(context, "Permission granted", Toast.LENGTH_SHORT).show()
             }else{
-
+                Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
             }
     }
     
@@ -121,198 +123,245 @@ fun Register(navHostController: NavHostController){
 
 
 
-    
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0A0A))
-            .padding(top = 30.dp)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-
+            .background(Darkgreen)
     ) {
-
-        Text(text = "Register here",
-            style = TextStyle(
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 30.sp
-            )
+        Image(
+            painter = painterResource(id = R.drawable.logincircle), // Assuming bg.jpg is in the drawable folder
+            contentDescription = null, // Content description is null for decorative images
+            modifier = Modifier.fillMaxSize(),
+            alignment = Alignment.BottomCenter
         )
 
-        Box(modifier = Modifier.height(40.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+//                .background(Color(0xFF0A0A0A))
+                .padding(top = 30.dp)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
 
+            ) {
 
-        Image(painter = if (imageUri == null)painterResource(id = R.drawable.person)
-            else rememberAsyncImagePainter(model = imageUri),
-            contentDescription = "person",
-             modifier = Modifier
-                 .size(120.dp)
-                 .clip(CircleShape)
-                 .background(Color.LightGray)
-                 .clickable {
-
-                     val isGranted = ContextCompat.checkSelfPermission(
-                         context, permissionToRequest
-                     ) == PackageManager.PERMISSION_GRANTED
-
-                     if (isGranted) {
-                         launcher.launch("image/*")
-                     } else {
-                         permissionLauncher.launch(permissionToRequest)
-                     }
-                 },
-        contentScale = ContentScale.Crop)
-
-        Box(modifier = Modifier.height(15.dp))
-
-        OutlinedTextField(
-            value = name ,
-            onValueChange = {name = it},
-            label = { Text(text = "  Name  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
-            )
-        )
-        Box(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = userName ,
-            onValueChange = {userName = it},
-            label = { Text(text = "   Username  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ),
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
-            )
-        )
-        Box(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = bio ,
-            onValueChange = {bio = it},
-            label = { Text(text = "  Bio  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            singleLine = false,
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
-            )
-        )
-        Box(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = email ,
-            onValueChange = {email = it},
-            label = { Text(text = "  Email  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ),
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
-            )
-        )
-
-        Box(modifier = Modifier.height(5.dp))
-
-
-        OutlinedTextField(
-            value = password ,
-            onValueChange = {password = it},
-            label = { Text(text = "  Password  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
-            )
-        )
-
-        Box(modifier = Modifier.height(40.dp))
-
-
-
-        ElevatedButton(onClick = {
-
-                                 if (name.isEmpty()||bio.isEmpty()||email.isEmpty()||password.isEmpty()||imageUri==null){
-                                     Toast.makeText(context,"Please fill all details",Toast.LENGTH_SHORT).show()
-                                 }else{
-                                     authViewModel.register(email, password, name, bio, userName,imageUri!!,context)
-                                 }
-
-        },colors = ButtonDefaults.buttonColors(Color.White),
-            modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Register",
+            Text(
+                text = "Register here",
                 style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.Black
-                ),
-                modifier = Modifier.padding(vertical = 6.dp)
-            )
-        }
-
-
-        TextButton(onClick = {
-            navHostController.navigate(Routes.Login.routes){
-                popUpTo(navHostController.graph.startDestinationId)
-                launchSingleTop=true
-            }
-
-        },
-            modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Already register? Login here",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color.White
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 30.sp,
+                    color = LightGreen
                 )
             )
+
+            Box(modifier = Modifier.height(40.dp))
+
+
+            Image(
+                painter = if (imageUri == null) painterResource(id = R.drawable.registerprofile)
+                else rememberAsyncImagePainter(model = imageUri),
+                contentDescription = "person",
+                modifier = Modifier
+                    .size(125.dp)
+                    .clip(CircleShape)
+                    .background(Color.LightGray)
+                    .clickable {
+
+                        val isGranted = ContextCompat.checkSelfPermission(
+                            context, permissionToRequest
+                        ) == PackageManager.PERMISSION_GRANTED
+
+                        if (isGranted) {
+                            launcher.launch("image/*")
+                        } else {
+                            permissionLauncher.launch(permissionToRequest)
+                        }
+                    },
+                contentScale = ContentScale.Crop
+            )
+
+            Box(modifier = Modifier.height(15.dp))
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = {
+                    Text(
+                        text = "  Name  ",
+                        color = Color.White
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightGreen, // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Color.White // Set cursor color
+                )
+            )
+            Box(modifier = Modifier.height(5.dp))
+
+            OutlinedTextField(
+                value = userName,
+                onValueChange = { userName = it },
+                label = {
+                    Text(
+                        text = "   Username  ",
+                        color = Color.White
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightGreen, // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Color.White // Set cursor color
+                )
+            )
+            Box(modifier = Modifier.height(5.dp))
+
+            OutlinedTextField(
+                value = bio,
+                onValueChange = { bio = it },
+                label = {
+                    Text(
+                        text = "  Bio  ",
+                        color = Color.White
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = false,
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightGreen, // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Color.White // Set cursor color
+                )
+            )
+            Box(modifier = Modifier.height(5.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = {
+                    Text(
+                        text = "  Email  ",
+                        color = Color.White
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightGreen, // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Color.White // Set cursor color
+                )
+            )
+
+            Box(modifier = Modifier.height(5.dp))
+
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = {
+                    Text(
+                        text = "  Password  ",
+                        color = Color.White
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                singleLine = true,
+                shape = RoundedCornerShape(30.dp),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = LightGreen, // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Color.White // Set cursor color
+                )
+            )
+
+            Box(modifier = Modifier.height(95.dp))
+
+
+
+            ElevatedButton(
+                onClick = {
+
+                    if (name.isEmpty() || bio.isEmpty() || email.isEmpty() || password.isEmpty() || imageUri == null) {
+                        Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        authViewModel.register(
+                            email,
+                            password,
+                            name,
+                            bio,
+                            userName,
+                            imageUri!!,
+                            context
+                        )
+                    }
+
+                }, colors = ButtonDefaults.buttonColors(Darkgreen),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Register",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    ),
+                    modifier = Modifier.padding(vertical = 6.dp)
+                )
+            }
+
+
+            TextButton(
+                onClick = {
+                    navHostController.navigate(Routes.Login.routes) {
+                        popUpTo(navHostController.graph.startDestinationId)
+                        launchSingleTop = true
+                    }
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Already register? Login here",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = Darkgreen
+                    )
+                )
+            }
+
+
         }
-
-
-
-
     }
-
 
 }
 

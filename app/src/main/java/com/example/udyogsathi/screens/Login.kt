@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -41,8 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.udyogsathi.R // Make sure to import R from your app package
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AuthViewModel
 
@@ -80,20 +87,35 @@ fun Login(navHostController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0A0A))
+            .background(Darkgreen)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg2), // Assuming bg.jpg is in the drawable folder
+            painter = painterResource(id = R.drawable.logincircle), // Assuming bg.jpg is in the drawable folder
             contentDescription = null, // Content description is null for decorative images
             modifier = Modifier.fillMaxSize(),
-            alignment = Alignment.TopCenter
+            alignment = Alignment.BottomCenter
+        )
+
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation))
+
+        // Control animation state
+        val progress by animateLottieCompositionAsState(composition)
+
+        LottieAnimation(
+            composition = composition,
+            progress = progress,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(top = 60.dp), // Adjust the size as needed
+            contentScale = ContentScale.Crop
         )
 
         // Content of the login screen
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 350.dp)
+                .padding(top = 330.dp)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -103,7 +125,8 @@ fun Login(navHostController: NavHostController) {
                 text = "Login",
                 style = TextStyle(
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 34.sp
+                    fontSize = 34.sp,
+                    color = LightGreen
                 )
             )
 
@@ -123,7 +146,7 @@ fun Login(navHostController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.LightGray, // Set border color when focused
+                    focusedBorderColor = LightGreen, // Set border color when focused
                     unfocusedBorderColor = Color.Gray, // Set border color when not focused
                     cursorColor = Color.White // Set cursor color
                 )
@@ -145,13 +168,13 @@ fun Login(navHostController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.LightGray, // Set border color when focused
+                    focusedBorderColor = LightGreen, // Set border color when focused
                     unfocusedBorderColor = Color.Gray, // Set border color when not focused
                     cursorColor = Color.White // Set cursor color
                 )
             )
 
-            Box(modifier = Modifier.height(30.dp))
+            Box(modifier = Modifier.height(150.dp))
 
             ElevatedButton(onClick = {
 
@@ -161,13 +184,13 @@ fun Login(navHostController: NavHostController) {
                     authViewModel.login(email, password, context)
                 }
 
-            } ,colors = ButtonDefaults.buttonColors(Color.White),
+            } ,colors = ButtonDefaults.buttonColors(Darkgreen),
                 modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Login",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = Color.Black
+                        color = Color.White
                     ),
                     modifier = Modifier.padding(vertical = 6.dp),
 
@@ -187,12 +210,13 @@ fun Login(navHostController: NavHostController) {
 
                 colors = ButtonDefaults.textButtonColors(
 
-                    contentColor = Color.LightGray
+                    contentColor = Darkgreen
                 ))
             {
                 Text(text = "New User? Create Account",
                     style = TextStyle(
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        color = Darkgreen
                     ))
             }
         }

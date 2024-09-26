@@ -31,6 +31,8 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.udyogsathi.item_view.ThreadItem
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AuthViewModel
 import com.example.udyogsathi.viewmodel.UserViewModel
@@ -78,13 +80,13 @@ fun OtherUsers(navHostController: NavHostController, uiD: String) {
         }
     }
 
-    LazyColumn(modifier = Modifier.background(Color.Black)) {
+    LazyColumn(modifier = Modifier.background(Darkgreen)) {
         item {
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 50.dp)
-                    .background(Color.Black)
+                    .background(Darkgreen)
             ) {
 
                 val (text, logo, userName,
@@ -188,7 +190,7 @@ fun OtherUsers(navHostController: NavHostController, uiD: String) {
                         .padding(top = 15.dp)
                         .padding(start = 20.dp),
                     colors = ButtonDefaults.buttonColors(
-                        Color.White
+                        LightGreen
                     )
                 )
                 {
@@ -199,7 +201,7 @@ fun OtherUsers(navHostController: NavHostController, uiD: String) {
                             "Follow",
                         style = TextStyle(
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = Darkgreen
                         )
                     )
                 }

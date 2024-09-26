@@ -36,6 +36,8 @@ import androidx.navigation.NavHostController
 import com.example.udyogsathi.item_view.ThreadItem
 import com.example.udyogsathi.item_view.UserItem
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
 import com.example.udyogsathi.viewmodel.HomeViewModel
 import com.example.udyogsathi.viewmodel.SearchViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -52,12 +54,12 @@ fun Search(navHostController:NavHostController){
         mutableStateOf("")
     }
 
-    Column(modifier = Modifier.background(Color.Black).fillMaxHeight()) {
+    Column(modifier = Modifier.background(Darkgreen).fillMaxHeight()) {
 
         Text(text = "Search", style = TextStyle(
             fontWeight = FontWeight.Bold,
-            fontSize = 26.sp,
-            color = Color.White
+            fontSize = 22.sp,
+            color = LightGreen
         ), modifier = Modifier.padding(top = 20.dp, start = 20.dp)
         )
 
@@ -77,7 +79,7 @@ fun Search(navHostController:NavHostController){
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray, // Set border color when focused
+                focusedBorderColor = LightGreen, // Set border color when focused
                 unfocusedBorderColor = Color.Gray, // Set border color when not focused
                 cursorColor = Color.White // Set cursor color
             )

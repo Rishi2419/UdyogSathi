@@ -54,6 +54,9 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.udyogsathi.R
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.MediumGreen
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AddThreadViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -116,13 +119,13 @@ fun AddThreads(navHostController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
 
-            .background(Color.Black)
+            .background(Darkgreen)
     ) {
 
         val (crossPic, text, divider,logo, userName, editText,
             attachMedia, replyText, button, imageBox) = createRefs()
 
-        Image(painter = painterResource(id = R.drawable.baseline_close_24),
+        Image(painter = painterResource(id = R.drawable.clear),
             contentDescription = "close",
             modifier = Modifier
                 .constrainAs(crossPic) {
@@ -140,10 +143,10 @@ fun AddThreads(navHostController: NavHostController) {
 
                 })
 
-        Text(text = "New thread", style = TextStyle(
+        Text(text = "New Post", style = TextStyle(
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = Color.White
+            fontSize = 22.sp,
+            color = LightGreen
         ), modifier = Modifier.constrainAs(text) {
             top.linkTo(crossPic.top)
             start.linkTo(crossPic.end)
@@ -174,9 +177,12 @@ fun AddThreads(navHostController: NavHostController) {
         )
 
 
-        Text(text = SharedPref.getUserName(context), style = TextStyle(
-            fontSize = 16.sp,
-            color = Color.White
+        Text(text = SharedPref.getName(context), style = TextStyle(
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 1.sp
+
         ), modifier = Modifier.constrainAs(userName) {
             top.linkTo(logo.top)
             start.linkTo(logo.end, margin = 15.dp)
@@ -230,7 +236,7 @@ fun AddThreads(navHostController: NavHostController) {
                     })
         }else{
             Box(modifier = Modifier
-                .background(Color.Black)
+                .background(Darkgreen)
                 .padding(12.dp)
                 .constrainAs(imageBox) {
                     top.linkTo(editText.bottom)
@@ -259,17 +265,17 @@ fun AddThreads(navHostController: NavHostController) {
         }
 
 
-        Text(text = "Any one can reply ", style = TextStyle(
-            fontSize = 16.sp,
-            color = Color.Gray
-        ), modifier = Modifier.constrainAs(replyText) {
-
-            start.linkTo(parent.start, margin = 20.dp)
-            bottom.linkTo(parent.bottom,margin = 25.dp )
-
-
-        }
-        )
+//        Text(text = "Any one can reply ", style = TextStyle(
+//            fontSize = 16.sp,
+//            color = Color.Gray
+//        ), modifier = Modifier.constrainAs(replyText) {
+//
+//            start.linkTo(parent.start, margin = 20.dp)
+//            bottom.linkTo(parent.bottom,margin = 25.dp )
+//
+//
+//        }
+//        )
 
         if (isPosting){
             CircularProgressIndicator(
@@ -278,17 +284,21 @@ fun AddThreads(navHostController: NavHostController) {
                         // Place the CircularProgressIndicator in the same position as the button
                         end.linkTo(parent.end,margin = 20.dp)
                         bottom.linkTo(parent.bottom,margin = 12.dp)
-                    }, color = Color.White
+                    }, color = LightGreen
             )
         }else{
             TextButton(onClick = {
 
 
-                isPosting = true
-                if (imageUri == null){
-                    threadViewModel.saveData(thread,FirebaseAuth.getInstance().currentUser!!.uid, "")
+                if (thread.isEmpty() && imageUri == null){
+                    Toast.makeText(context,"No threads or media attached",Toast.LENGTH_SHORT).show()
                 }else{
-                    threadViewModel.saveImage(thread,FirebaseAuth.getInstance().currentUser!!.uid,imageUri!!)
+                    isPosting = true
+                    if (imageUri == null){
+                        threadViewModel.saveData(thread,FirebaseAuth.getInstance().currentUser!!.uid, "")
+                    }else{
+                        threadViewModel.saveImage(thread,FirebaseAuth.getInstance().currentUser!!.uid,imageUri!!)
+                    }
                 }
 
 
@@ -296,11 +306,11 @@ fun AddThreads(navHostController: NavHostController) {
                 end.linkTo(parent.end,margin = 20.dp)
                 bottom.linkTo(parent.bottom,margin = 12.dp)
             },
-                colors = ButtonDefaults.buttonColors(Color.White)) {
+                colors = ButtonDefaults.buttonColors(LightGreen)) {
 
                 Text(text = "Post", style = TextStyle(
                     fontSize = 16.sp,
-                    color = Color.Black
+                    color = Darkgreen
                 )
 
                 )

@@ -13,4 +13,6 @@ sealed class Routes(val routes:String){
     object Register : Routes("register")
     object OtherUsers : Routes("register/{data}")
 
+    object ChatBot : Routes("chatbot")
+
 }

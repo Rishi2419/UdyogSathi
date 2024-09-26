@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.udyogsathi.model.UserModel
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
 
 @Composable
 fun UserItem(
@@ -30,14 +31,14 @@ fun UserItem(
     navHostController: NavHostController
 ) {
 
-    Column(modifier = Modifier.background(Color.Black)) {
+    Column(modifier = Modifier.background(Darkgreen)) {
 
 
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
 
-                .background(Color.Black)
+                .background(Darkgreen)
                 .clickable {
 
                     val routes = Routes.OtherUsers.routes.replace("{data}",users.uid)

@@ -32,6 +32,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.udyogsathi.R
 import com.example.udyogsathi.model.ThreadModel
 import com.example.udyogsathi.model.UserModel
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.MediumGreen
 
 @Composable
 fun ThreadItem(
@@ -42,13 +44,13 @@ fun ThreadItem(
 ) {
 
 
-        Column(modifier = Modifier.background(Color.Black)) {
+        Column(modifier = Modifier.background(Darkgreen)) {
 
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
 
-                    .background(Color.Black)
+                    .background(Darkgreen)
             ) {
                 val (userImage, userName, date, time, title, image) = createRefs()
 
@@ -97,7 +99,7 @@ fun ThreadItem(
                 val timeStampParts = thread.timeStamp.split(",")
                 Text(
                     text = timeStampParts[0], // Display time on the first line
-                    style = TextStyle(fontSize = 12.sp, color = Color.DarkGray),
+                    style = TextStyle(fontSize = 12.sp, color = Color.Gray),
                     modifier = Modifier.constrainAs(time) {
                         top.linkTo(userName.top)
 
@@ -106,7 +108,7 @@ fun ThreadItem(
                 )
                 Text(
                     text = timeStampParts.getOrNull(1) ?: "", // Display date on the second line
-                    style = TextStyle(fontSize = 12.sp, color = Color.DarkGray),
+                    style = TextStyle(fontSize = 12.sp, color = Color.Gray),
                     modifier = Modifier.constrainAs(date) {
                         top.linkTo(time.bottom, margin = 1.dp)
 

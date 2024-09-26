@@ -48,6 +48,9 @@ import com.example.udyogsathi.R
 import com.example.udyogsathi.item_view.ThreadItem
 import com.example.udyogsathi.model.UserModel
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.MediumGreen
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AuthViewModel
 import com.example.udyogsathi.viewmodel.UserViewModel
@@ -109,14 +112,14 @@ fun Profile(navHostController: NavHostController){
 
 
 
-    LazyColumn(modifier = Modifier.background(Color.Black)) {
+    LazyColumn(modifier = Modifier.background(Darkgreen)) {
 
         item{
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 35.dp)
-                    .background(Color.Black)
+                    .background(Darkgreen)
             ) {
 
                 val (text,logo, userName,
@@ -211,11 +214,11 @@ fun Profile(navHostController: NavHostController){
                         start.linkTo(parent.start)
                     }
                     .padding(top = 15.dp)
-                    .padding(start = 20.dp),colors = ButtonDefaults.buttonColors(Color.White))
+                    .padding(start = 20.dp),colors = ButtonDefaults.buttonColors(LightGreen))
                 {
                     Text(text = "Log Out",style = TextStyle(
                     fontSize = 16.sp,
-                    color = Color.Black
+                    color = Darkgreen
                     ))
                 }
 

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.udyogsathi.screens.AddThreads
 import com.example.udyogsathi.screens.BottomNav
+import com.example.udyogsathi.screens.ChatBot
 import com.example.udyogsathi.screens.Home
 import com.example.udyogsathi.screens.Login
 import com.example.udyogsathi.screens.Notification
@@ -23,6 +24,9 @@ fun NavGraph(navController: NavHostController){
 
         composable(Routes.Splash.routes){
             Splash(navController)
+        }
+        composable(Routes.ChatBot.routes){
+            ChatBot(navController)
         }
         composable(Routes.Home.routes){
             Home(navController)

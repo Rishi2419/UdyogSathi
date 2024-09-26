@@ -2,6 +2,7 @@ package com.example.udyogsathi.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +30,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.udyogsathi.R
 import com.example.udyogsathi.navigation.Routes
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.black
 import com.example.udyogsathi.ui.theme.gradientTextStyle
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -35,47 +40,49 @@ import kotlinx.coroutines.delay
 @Composable
 fun Splash(navController: NavHostController){
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .background(Darkgreen)
+    ) {
         Column(modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .padding(bottom = 120.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-           verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center
         ) {
             Image(painter = painterResource(id = R.drawable.logo), contentDescription ="",
-            modifier = Modifier
-                .padding(bottom = 130.dp)
-                .size(100.dp)
+                modifier = Modifier
+                    .padding(bottom = 30.dp)
+                    .size(160.dp)
 
             )
 
+                Text(
+                    text = "UdyogSathi",
+                    fontFamily = FontFamily.SansSerif,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 34.sp,
+                    letterSpacing = 2.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            Text(
+                    text = "Start-Connect-Grow",
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 16.sp,
+                    color = Color.LightGray,
+
+
+                )
+
+
+
         }
+
     }
 
-    Column(
-        modifier = Modifier
-            .padding(bottom = 40.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom
 
-    ) {
-        Text(text = "from",
-            fontFamily = FontFamily.SansSerif,
-            color = Color.Gray,
-            fontWeight = FontWeight.ExtraLight,
-            fontSize = 18.sp,
-            letterSpacing = 2.sp
-        )
-        Text(text = "Rishikesh",
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.ExtraLight,
-            fontSize = 22.sp,
-            letterSpacing = 2.sp,
-            style = gradientTextStyle,
-            modifier = Modifier.padding(8.dp),
-        )
-    }
 
 //    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
 //
@@ -102,8 +109,11 @@ fun Splash(navController: NavHostController){
 //
 //        }
         if (FirebaseAuth.getInstance().currentUser != null) {
+            //takes to home screen
             navController.navigate(Routes.BottomNav.routes) {
+                // clears all backstack
                 popUpTo(navController.graph.startDestinationId){
+                    //Splash screen is removed
                     inclusive = true
                 }
             }

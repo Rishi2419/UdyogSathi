@@ -36,6 +36,12 @@ import com.example.udyogsathi.navigation.Routes
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.MediumGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,137 +79,15 @@ fun BottomNav(navHostController: NavHostController) {
     }
 }
 
-//@Composable
-//fun MyBottomBar(navController1: NavHostController) {
-//
-//    val backStackEntry = navController1.currentBackStackEntryAsState()
-//
-//    val list = listOf(
-//
-//        BottomNavItem(
-//            "Home",
-//            Routes.Home.routes,
-//            Icons.Rounded.Home
-//        ),
-//        BottomNavItem(
-//            "Search",
-//            Routes.Search.routes,
-//            Icons.Rounded.Search
-//        ),
-//        BottomNavItem(
-//            "Add Threads",
-//            Routes.AddThread.routes,
-//            Icons.Rounded.Add
-//        ),
-//        BottomNavItem(
-//            "Notification",
-//            Routes.Notification.routes,
-//            Icons.Rounded.Notifications
-//        ),
-//        BottomNavItem(
-//            "Profile",
-//            Routes.Profile.routes,
-//            Icons.Rounded.Person
-//        )
-//    )
-//
-//    BottomAppBar{
-//        list.forEach {
-//
-//            val selected = it.route == backStackEntry?.value?.destination?.route
-//
-//            NavigationBarItem(selected = selected, onClick = {
-//                navController1.navigate(it.route) {
-//                    popUpTo(navController1.graph.findStartDestination().id) {
-//                        saveState = true
-//                    }
-//                    launchSingleTop = true
-//                }
-//            }, icon = {
-//                Icon(imageVector = it.icon, contentDescription = "",
-//                    tint = if (selected) Color.White else Color.Gray)
-//            })
-//
-//        }
-//    }
-//
-//}
-//
-//@Composable
-//fun MyBottomBar(navController1: NavHostController) {
-//    BottomAppBar(
-//        modifier = Modifier.background(Color.Black) // Set background color of bottom app bar
-//    ) {
-//        val currentRoute = navController1.currentBackStackEntryAsState().value?.destination?.route
-//
-//        listOf(
-//            BottomNavItem(
-//                "Home",
-//                Routes.Home.routes,
-//                Icons.Rounded.Home,
-//                Color.Gray
-//            ),
-//            BottomNavItem(
-//                "Search",
-//                Routes.Search.routes,
-//                Icons.Rounded.Search,
-//                Color.Gray
-//            ),
-//            BottomNavItem(
-//                "Add Threads",
-//                Routes.AddThread.routes,
-//                Icons.Rounded.Add,
-//                Color.Gray
-//            ),
-//            BottomNavItem(
-//                "Notification",
-//                Routes.Notification.routes,
-//                Icons.Rounded.Notifications,
-//                Color.Gray
-//            ),
-//            BottomNavItem(
-//                "Profile",
-//                Routes.Profile.routes,
-//                Icons.Rounded.Person,
-//                Color.Gray
-//            )
-//        ).forEach { item ->
-//            val isSelected = currentRoute == item.route
-//
-//            Column(
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center,
-//                modifier = Modifier
-//                    .clickable {
-//                        navController1.navigate(item.route) {
-//                            popUpTo(navController1.graph.findStartDestination().id) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                        }
-//                    }
-//                    .background(Color.Black)
-//                    .fillMaxHeight()
-//                    .weight(1f)
-//            ) {
-//                Icon(
-//                    imageVector = item.icon,
-//                    contentDescription = "",
-//                    tint = if (isSelected) Color.White else item.iconColor // Set icon color
-//                )
-//
-//            }
-//        }
-//    }
-//}
-//
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBottomBar(navController1: NavHostController) {
     BottomAppBar(
-        modifier = Modifier.background(Color.Black)
-            .border(width = 0.dp, color = Color.Transparent)// Set background color of bottom app bar
+        modifier = Modifier.background(Darkgreen)
+            .background(Darkgreen)
+            .border(width = 0.dp, color = Color.Transparent),
+        tonalElevation = 0.dp,
+        containerColor = Darkgreen
     ) {
         val currentRoute = navController1.currentBackStackEntryAsState().value?.destination?.route
 
@@ -212,38 +96,39 @@ fun MyBottomBar(navController1: NavHostController) {
                 "Home",
                 Routes.Home.routes,
                 Icons.Rounded.Home,
-                Color.Gray
+                Color.White
             ),
             BottomNavItem(
                 "Search",
                 Routes.Search.routes,
                 Icons.Rounded.Search,
-                Color.Gray
+                Color.White
             ),
             BottomNavItem(
                 "Add Threads",
                 Routes.AddThread.routes,
                 Icons.Rounded.Add,
-                Color.Gray
+                Color.White
             ),
             BottomNavItem(
                 "Notification",
                 Routes.Notification.routes,
                 Icons.Rounded.Notifications,
-                Color.Gray
+                Color.White
             ),
             BottomNavItem(
                 "Profile",
                 Routes.Profile.routes,
                 Icons.Rounded.Person,
-                Color.Gray
+                Color.White
             )
         ).forEach { item ->
             val isSelected = currentRoute == item.route
 
             Box(
                 modifier = Modifier
-                    .background(Color.Black)
+                        //main nav bar color
+                    .background(Darkgreen)
 
                     .pointerInput(Unit) {
                         detectTapGestures { offset ->
@@ -262,16 +147,17 @@ fun MyBottomBar(navController1: NavHostController) {
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxHeight()
-                        .background(Color.Black)
+                Box(
+                    modifier = Modifier
+                        .size(45.dp) // Circle size
+                        .clip(CircleShape) // Make it a circle
+                        .background(if (isSelected) LightGreen else Color.Transparent), // Light green circle if selected
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = "",
-                        tint = if (isSelected) Color.White else item.iconColor // Set icon color
+                        tint = if (isSelected) Darkgreen else item.iconColor // Set icon color
                     )
                 }
             }
