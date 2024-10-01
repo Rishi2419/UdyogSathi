@@ -42,7 +42,7 @@ fun Splash(navController: NavHostController){
 
     Box(
         modifier = Modifier.fillMaxSize()
-            .background(Darkgreen)
+            .background(Color.White)
     ) {
         Column(modifier = Modifier
             .fillMaxSize()
@@ -60,18 +60,18 @@ fun Splash(navController: NavHostController){
                 Text(
                     text = "UdyogSathi",
                     fontFamily = FontFamily.SansSerif,
-                    color = Color.White,
+                    color = Darkgreen,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 34.sp,
-                    letterSpacing = 2.sp,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    fontSize = 32.sp,
+                    letterSpacing = 1.sp,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             Text(
                     text = "Start-Connect-Grow",
                     fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Thin,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
-                    color = Color.LightGray,
+                    color = Darkgreen,
 
 
                 )
@@ -120,7 +120,7 @@ fun Splash(navController: NavHostController){
 
         }
         else{
-            navController.navigate(Routes.Login.routes){
+            navController.navigate(Routes.Splash2.routes){
                 popUpTo(navController.graph.startDestinationId){
                     inclusive = true
                 }

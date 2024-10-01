@@ -9,6 +9,7 @@ object SharedPref {
         name: String,
         email: String,
         bio: String,
+        userType: String,
         userName: String,
         imageUrl: String,
         context: Context
@@ -19,6 +20,7 @@ object SharedPref {
         editor.putString("name", name)
         editor.putString("email", email)
         editor.putString("bio", bio)
+        editor.putString("userType", userType)
         editor.putString("userName", userName)
         editor.putString("imageUrl", imageUrl)
         editor.apply()
@@ -43,6 +45,11 @@ object SharedPref {
     fun getBio(context: Context): String {
         val sharedPreferences = context.getSharedPreferences("users", MODE_PRIVATE)
         return sharedPreferences.getString("bio", "")!!
+    }
+
+    fun getUserType(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("users", MODE_PRIVATE)
+        return sharedPreferences.getString("userType", "")!!
     }
 
     fun getImage(context: Context): String {

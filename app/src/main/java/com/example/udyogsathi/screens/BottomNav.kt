@@ -36,12 +36,20 @@ import com.example.udyogsathi.navigation.Routes
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import com.example.udyogsathi.ui.theme.Darkgreen
-import com.example.udyogsathi.ui.theme.LightGreen
-import com.example.udyogsathi.ui.theme.MediumGreen
+import com.example.udyogsathi.ui.theme.Gradient1
+import com.example.udyogsathi.ui.theme.Gradient2
+import com.example.udyogsathi.ui.theme.Gradient3
+import com.example.udyogsathi.ui.theme.gradientTextStyle
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +59,8 @@ fun BottomNav(navHostController: NavHostController) {
 
     Scaffold(bottomBar = {MyBottomBar(navController1)}) { innerPadding ->
         NavHost(navController = navController1, startDestination = Routes.Home.routes,
-            modifier = Modifier.padding(innerPadding)){
+            modifier = Modifier.padding(innerPadding)
+                .background(Color.White)){
 
             // Used during build time
             composable(Routes.Splash.routes){
@@ -78,89 +87,103 @@ fun BottomNav(navHostController: NavHostController) {
 
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBottomBar(navController1: NavHostController) {
-    BottomAppBar(
-        modifier = Modifier.background(Darkgreen)
-            .background(Darkgreen)
-            .border(width = 0.dp, color = Color.Transparent),
-        tonalElevation = 0.dp,
-        containerColor = Darkgreen
-    ) {
-        val currentRoute = navController1.currentBackStackEntryAsState().value?.destination?.route
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .background(Color.White) // Apply gradient to the entire BottomAppBar
+    ){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip( RoundedCornerShape(
+                    topStart = 25.dp,
+                    topEnd = 25.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ))
+                .background(gradientTextStyle.brush!!) // Apply gradient to the entire BottomAppBar
+        ) {
+            BottomAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                tonalElevation = 0.dp,
+                containerColor = Color.Transparent // Set the containerColor to transparent
+            ) {
+                val currentRoute = navController1.currentBackStackEntryAsState().value?.destination?.route
 
-        listOf(
-            BottomNavItem(
-                "Home",
-                Routes.Home.routes,
-                Icons.Rounded.Home,
-                Color.White
-            ),
-            BottomNavItem(
-                "Search",
-                Routes.Search.routes,
-                Icons.Rounded.Search,
-                Color.White
-            ),
-            BottomNavItem(
-                "Add Threads",
-                Routes.AddThread.routes,
-                Icons.Rounded.Add,
-                Color.White
-            ),
-            BottomNavItem(
-                "Notification",
-                Routes.Notification.routes,
-                Icons.Rounded.Notifications,
-                Color.White
-            ),
-            BottomNavItem(
-                "Profile",
-                Routes.Profile.routes,
-                Icons.Rounded.Person,
-                Color.White
-            )
-        ).forEach { item ->
-            val isSelected = currentRoute == item.route
+                listOf(
+                    BottomNavItem(
+                        "Home",
+                        Routes.Home.routes,
+                        Icons.Rounded.Home,
+                        Color.White
+                    ),
+                    BottomNavItem(
+                        "Search",
+                        Routes.Search.routes,
+                        Icons.Rounded.Search,
+                        Color.White
+                    ),
+                    BottomNavItem(
+                        "Add Threads",
+                        Routes.AddThread.routes,
+                        Icons.Rounded.Add,
+                        Color.White
+                    ),
+                    BottomNavItem(
+                        "Notification",
+                        Routes.Notification.routes,
+                        Icons.Rounded.LocationOn,
+                        Color.White
+                    ),
+                    BottomNavItem(
+                        "Profile",
+                        Routes.Profile.routes,
+                        Icons.Rounded.Person,
+                        Color.White
+                    )
+                ).forEach { item ->
+                    val isSelected = currentRoute == item.route
 
-            Box(
-                modifier = Modifier
-                        //main nav bar color
-                    .background(Darkgreen)
-
-                    .pointerInput(Unit) {
-                        detectTapGestures { offset ->
-                            // navigate if tapped
-                            //used in runtime
-                            navController1.navigate(item.route) {
-                                //backstack
-                                popUpTo(navController1.graph.findStartDestination().id) {
-                                    saveState = true
+                    Box(
+                        modifier = Modifier
+                            .pointerInput(Unit) {
+                                detectTapGestures { offset ->
+                                    // Navigate if tapped
+                                    navController1.navigate(item.route) {
+                                        popUpTo(navController1.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                    }
                                 }
-                                launchSingleTop = true
                             }
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // This box creates the circular icon background
+                        Box(
+                            modifier = Modifier
+                                .size(42.dp) // Circle size
+                                .clip(RoundedCornerShape(22.dp)) // Make it a circle
+                                .background(if (isSelected) Color.White.copy(alpha = 0.3f) else Color.Transparent) // Transparent background
+                                .blur(8.dp), // Apply a blur for the glass effect
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = "",
+                                tint = if (isSelected) item.iconColor else item.iconColor // Set icon color
+                            )
                         }
                     }
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(45.dp) // Circle size
-                        .clip(CircleShape) // Make it a circle
-                        .background(if (isSelected) LightGreen else Color.Transparent), // Light green circle if selected
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = "",
-                        tint = if (isSelected) Darkgreen else item.iconColor // Set icon color
-                    )
                 }
             }
         }
     }
+
 }

@@ -56,7 +56,7 @@ class AuthViewModel: ViewModel() {
         userRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userData = snapshot.getValue(UserModel::class.java)
-                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio, userData!!.userName, userData!!.imageUrl,context)
+                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio,userData!!.userType, userData!!.userName, userData!!.imageUrl,context)
 
             }
 
@@ -72,6 +72,7 @@ class AuthViewModel: ViewModel() {
         password: String,
         name: String,
         bio: String,
+        userType:String,
         userName: String,
         imageUri: Uri,
         context: Context
@@ -80,7 +81,7 @@ class AuthViewModel: ViewModel() {
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _firebaseUser.postValue(auth.currentUser)
-                    saveImage(email,password,name,bio,userName,imageUri,auth.currentUser?.uid, context )
+                    saveImage(email,password,name,bio,userType,userName,imageUri,auth.currentUser?.uid, context )
                 }
                 else{
                     _error.postValue("Something went wrong.")
@@ -88,17 +89,17 @@ class AuthViewModel: ViewModel() {
             }
     }
 
-    private fun saveImage(email: String, password: String, name: String, bio: String, userName: String, imageUri: Uri, uid: String?,context: Context) {
+    private fun saveImage(email: String, password: String, name: String, bio: String,userType: String, userName: String, imageUri: Uri, uid: String?,context: Context) {
 
         val uploadTask = imageRef.putFile(imageUri)
         uploadTask.addOnSuccessListener {
             imageRef.downloadUrl.addOnSuccessListener {
-                saveData(email,password,name,bio,userName,it.toString(),uid,context)
+                saveData(email,password,name,bio,userType,userName,it.toString(),uid,context)
             }
         }
     }
 
-    private fun saveData(email: String, password: String, name: String, bio: String, userName: String, toString: String, uid: String?,context: Context) {
+    private fun saveData(email: String, password: String, name: String, bio: String,userType: String, userName: String, toString: String, uid: String?,context: Context) {
 
 
         //Followers and Following
@@ -113,10 +114,10 @@ class AuthViewModel: ViewModel() {
         //likesRef.set(mapOf("likesIds" to listOf<String>()))
 
 
-        val userData = UserModel(email,password,name,bio,userName,toString,uid!!)
+        val userData = UserModel(email,password,name,bio,userType,userName,toString,uid!!)
         userRef.child(uid!!).setValue(userData)
             .addOnSuccessListener {
-                SharedPref.storeData(name,email,bio,userName,toString,context)
+                SharedPref.storeData(name,email,bio,userType,userName,toString,context)
                 Toast.makeText(context,"Account created", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(context, "Something went wrong, try again later", Toast.LENGTH_SHORT).show()

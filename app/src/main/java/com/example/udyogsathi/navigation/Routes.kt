@@ -15,4 +15,5 @@ sealed class Routes(val routes:String){
 
     object ChatBot : Routes("chatbot")
 
+    object Splash2 : Routes("splash2")
 }

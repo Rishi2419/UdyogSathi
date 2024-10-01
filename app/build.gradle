@@ -95,4 +95,13 @@ dependencies {
     //map
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.android.libraries.places:places:2.5.0")
+
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
+
+    //Splash 2:-
+    // ExoPlayer for video playback
+    implementation ("com.google.android.exoplayer:exoplayer:2.18.1")
+    // Jetpack Compose Foundation
+    implementation ("androidx.compose.foundation:foundation:1.5.0")
 }

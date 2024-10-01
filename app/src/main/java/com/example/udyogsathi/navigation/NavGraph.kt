@@ -16,6 +16,7 @@ import com.example.udyogsathi.screens.Profile
 import com.example.udyogsathi.screens.Register
 import com.example.udyogsathi.screens.Search
 import com.example.udyogsathi.screens.Splash
+import com.example.udyogsathi.screens.Splash2
 
 @Composable
 fun NavGraph(navController: NavHostController){
@@ -27,6 +28,10 @@ fun NavGraph(navController: NavHostController){
         }
         composable(Routes.ChatBot.routes){
             ChatBot(navController)
+        }
+
+        composable(Routes.Splash2.routes){
+            Splash2(navController)
         }
         composable(Routes.Home.routes){
             Home(navController)

@@ -16,19 +16,22 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
 val gradientTextStyle = TextStyle(
-    fontSize = 16.sp,
+    fontSize = 34.sp,
+    fontWeight = FontWeight.ExtraBold,
     brush = Brush.horizontalGradient(
-        colors = listOf(InstagramGradientStartColor, InstagramGradientEndColor)
+//        colors = listOf(green1, green2, green3)
+              colors = listOf(Gradient1, Gradient2, Gradient3)
     )
 )
 
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Darkgreen,
+    primary = Color.White,
     secondary = PurpleGrey80,
     tertiary = Pink80
 )
@@ -69,7 +72,7 @@ fun UdyogSathiTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = Color.Black.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

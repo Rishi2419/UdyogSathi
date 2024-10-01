@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,7 +50,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.udyogsathi.R // Make sure to import R from your app package
 import com.example.udyogsathi.navigation.Routes
 import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.Gradient1
+import com.example.udyogsathi.ui.theme.Gradient2
 import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.gradientTextStyle
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AuthViewModel
 
@@ -82,146 +86,144 @@ fun Login(navHostController: NavHostController) {
     var password  by remember {
         mutableStateOf("")
     }
-
-    // Background image
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Darkgreen)
+            .background(Color.White)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logincircle), // Assuming bg.jpg is in the drawable folder
-            contentDescription = null, // Content description is null for decorative images
+            painter = painterResource(id = R.drawable.logincircle),
+            contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             alignment = Alignment.BottomCenter
         )
 
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation))
-
-        // Control animation state
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loginanimation))
         val progress by animateLottieCompositionAsState(composition)
 
-        LottieAnimation(
-            composition = composition,
-            progress = progress,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-                .padding(top = 60.dp), // Adjust the size as needed
-            contentScale = ContentScale.Crop
-        )
-
-        // Content of the login screen
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 330.dp)
-                .padding(24.dp),
+                .padding(24.dp), // Removed the padding from top and added overall padding
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween // Space the content evenly between top and bottom
         ) {
 
-            Text(
-                text = "Login",
-                style = TextStyle(
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 34.sp,
-                    color = LightGreen
-                )
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(top = 120.dp),
+                contentScale = ContentScale.Crop
             )
-
-            Box(modifier = Modifier.height(25.dp))
-
-            OutlinedTextField(
-                value = email ,
-                onValueChange = {email = it},
-                label = { Text(text = "  Email  ",
-                color = Color.White
-                )},
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-                singleLine = true ,
-                shape = RoundedCornerShape(30.dp),
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = LightGreen, // Set border color when focused
-                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                    cursorColor = Color.White // Set cursor color
+            // Top Section (Animation or Logo)
+            Column(
+                //modifier = Modifier.padding(top = 10.dp), // You can adjust the top padding as needed
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Login",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Gradient2
                 )
 
-            )
+                Spacer(modifier = Modifier.height(25.dp))
 
-            Box(modifier = Modifier.height(7.dp))
-
-            OutlinedTextField(
-                value = password ,
-                onValueChange = {password = it},
-                label = { Text(text = "  Password  ",
-                    color = Color.White)},
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-                singleLine = true,
-                shape = RoundedCornerShape(30.dp),
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = LightGreen, // Set border color when focused
-                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                    cursorColor = Color.White // Set cursor color
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text(text = " Email ") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    singleLine = true,
+                    shape = RoundedCornerShape(30.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = Color.Gray, fontSize = 16.sp),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Gradient2,
+                        unfocusedBorderColor = Color.Gray,
+                        cursorColor = Gradient2,
+                        focusedLabelColor = Gradient2,
+                        unfocusedLabelColor = Color.Gray
+                    )
                 )
-            )
 
-            Box(modifier = Modifier.height(150.dp))
+                Spacer(modifier = Modifier.height(7.dp))
 
-            ElevatedButton(onClick = {
-
-                if (email.isEmpty() || password.isEmpty()){
-                    Toast.makeText(context,"Please provide all fields",Toast.LENGTH_SHORT).show()
-                }else {
-                    authViewModel.login(email, password, context)
-                }
-
-            } ,colors = ButtonDefaults.buttonColors(Darkgreen),
-                modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Login",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.White
-                    ),
-                    modifier = Modifier.padding(vertical = 6.dp),
-
-
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text(text = " Password ") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    singleLine = true,
+                    shape = RoundedCornerShape(30.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = Color.Gray, fontSize = 16.sp),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Gradient2,
+                        unfocusedBorderColor = Color.Gray,
+                        cursorColor = Gradient2,
+                        focusedLabelColor = Gradient2,
+                        unfocusedLabelColor = Color.Gray
+                    )
                 )
             }
 
+            // Bottom Section (Buttons)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom // Align at the bottom
+            ) {
 
-
-            TextButton(onClick = {
-                navHostController.navigate(Routes.Register.routes){
-                    popUpTo(navHostController.graph.startDestinationId)
-                    launchSingleTop=true
+                ElevatedButton(
+                    onClick = {
+                        if (email.isEmpty() || password.isEmpty()) {
+                            Toast.makeText(context, "Please provide all fields", Toast.LENGTH_SHORT).show()
+                        } else {
+                            authViewModel.login(email, password, context)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(Darkgreen),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Login",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color.White
+                        ),
+                        modifier = Modifier.padding(vertical = 6.dp)
+                    )
                 }
 
-            },
+                Spacer(modifier = Modifier.height(8.dp)) // Small gap between the buttons
 
-                colors = ButtonDefaults.textButtonColors(
-
-                    contentColor = Darkgreen
-                ))
-            {
-                Text(text = "New User? Create Account",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        color = Darkgreen
-                    ))
+                TextButton(
+                    onClick = {
+                        navHostController.navigate(Routes.Register.routes) {
+                            popUpTo(navHostController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
+                    }
+                ) {
+                    Text(
+                        text = "New User? Create Account",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = Color.White,
+                            letterSpacing = 0.5.sp
+                        )
+                    )
+                }
             }
         }
     }
-}
+
+    }
+
 
 @Preview(showBackground = true)
 @Composable

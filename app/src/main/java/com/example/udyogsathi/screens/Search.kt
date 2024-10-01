@@ -1,8 +1,12 @@
 package com.example.udyogsathi.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,21 +27,29 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.udyogsathi.R
 import com.example.udyogsathi.item_view.ThreadItem
 import com.example.udyogsathi.item_view.UserItem
 import com.example.udyogsathi.navigation.Routes
 import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.Gradient2
 import com.example.udyogsathi.ui.theme.LightGreen
+import com.example.udyogsathi.ui.theme.gradientTextStyle
 import com.example.udyogsathi.viewmodel.HomeViewModel
 import com.example.udyogsathi.viewmodel.SearchViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -45,63 +57,108 @@ import com.google.firebase.firestore.auth.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Search(navHostController:NavHostController){
+fun Search(navHostController:NavHostController) {
 
-    val searchViewModel : SearchViewModel = viewModel()
+    val searchViewModel: SearchViewModel = viewModel()
     val userList by searchViewModel.usersList.observeAsState(null)
 
     var search by remember {
         mutableStateOf("")
     }
 
-    Column(modifier = Modifier.background(Darkgreen).fillMaxHeight()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientTextStyle.brush!!)
+    ) {
 
-        Text(text = "Search", style = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            color = LightGreen
-        ), modifier = Modifier.padding(top = 20.dp, start = 20.dp)
+        Text(
+            text = "Search", style = TextStyle(
+                fontSize = 22.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Medium
+            ), modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 22.dp)
         )
+    }
 
 
-        OutlinedTextField(
-            value = search ,
-            onValueChange = {search = it},
-            label = { Text(text = "  Search User  ",
-                color = Color.White)},
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            shape = RoundedCornerShape(30.dp),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth().padding(start = 20.dp).padding(end = 20.dp).padding(top = 10.dp).padding(bottom = 20.dp).height(60.dp),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Search, contentDescription = null)
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = LightGreen, // Set border color when focused
-                unfocusedBorderColor = Color.Gray, // Set border color when not focused
-                cursorColor = Color.White // Set cursor color
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 65.dp)
+            .background(gradientTextStyle.brush!!)
+            .clip(
+                RoundedCornerShape(
+                    topStart = 25.dp,
+                    topEnd = 25.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                )
             )
-        )
+    )
+    {
 
 
-        LazyColumn{
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
 
-            val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-            if (userList != null && userList!!.isNotEmpty()){
-                val filterItems = userList!!.filter { it.name!!.contains(search, ignoreCase = true) && it.uid != currentUserUid}
-                items(filterItems?: emptyList()){pairs ->
-
-                    UserItem(
-                        users = pairs,
-                        navHostController
-
+            OutlinedTextField(
+                value = search,
+                onValueChange = { search = it },
+                label = {
+                    Text(
+                        text = "  Search User  "
                     )
-                }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                shape = RoundedCornerShape(30.dp),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().padding(start = 20.dp).padding(end = 20.dp)
+                    .padding(top = 10.dp).padding(bottom = 20.dp).height(60.dp),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = null, tint = Color.DarkGray)
+                },
+                textStyle = TextStyle(color = Color.Gray, fontSize = 16.sp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Gradient2 , // Set border color when focused
+                    unfocusedBorderColor = Color.Gray, // Set border color when not focused
+                    cursorColor = Gradient2, // Set cursor color
+                    focusedLabelColor = Gradient2,
+                    unfocusedLabelColor = Color.Gray
+                )
+            )
 
+
+            LazyColumn (modifier = Modifier.padding(top = 80.dp)){
+
+
+                val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+                if (userList != null && userList!!.isNotEmpty()) {
+                    val filterItems = userList!!.filter {
+                        it.name!!.contains(
+                            search,
+                            ignoreCase = true
+                        ) && it.uid != currentUserUid
+                    }
+                    items(filterItems ?: emptyList()) { pairs ->
+
+                        UserItem(
+                            users = pairs,
+                            navHostController
+
+                        )
+                    }
+
+                }
             }
         }
     }
-
 }
+

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
@@ -50,7 +51,8 @@ import com.example.udyogsathi.model.UserModel
 import com.example.udyogsathi.navigation.Routes
 import com.example.udyogsathi.ui.theme.Darkgreen
 import com.example.udyogsathi.ui.theme.LightGreen
-import com.example.udyogsathi.ui.theme.MediumGreen
+import com.example.udyogsathi.ui.theme.gradientTextStyle
+import com.example.udyogsathi.ui.theme.text
 import com.example.udyogsathi.utils.SharedPref
 import com.example.udyogsathi.viewmodel.AuthViewModel
 import com.example.udyogsathi.viewmodel.UserViewModel
@@ -112,27 +114,56 @@ fun Profile(navHostController: NavHostController){
 
 
 
-    LazyColumn(modifier = Modifier.background(Darkgreen)) {
+    LazyColumn(modifier = Modifier.background(gradientTextStyle.brush!!)) {
 
         item{
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 35.dp)
-                    .background(Darkgreen)
+                    .padding(top = 25.dp)
+
             ) {
 
-                val (text,logo, userName,
-                    bio,button, followers , following,divider)= createRefs()
+                val (title,logoutIcon,Name,logo, userName,
+                    bio, followers , following,divider,followericon, followingicon)= createRefs()
+
+
+                Text(text = "My Profile", style = TextStyle(
+                    fontSize = 22.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium
+                ), modifier = Modifier
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.logout_icon),
+                    contentDescription = "Logout",
+                    modifier = Modifier
+                        .constrainAs(logoutIcon) {
+                            top.linkTo(title.top)
+                            bottom.linkTo(title.bottom)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                        .size(23.dp)
+                        .clickable {
+                            authViewModel.logout()
+                        }
+                )
 
 
                 Text(text = SharedPref.getName(context), style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    color = Color.White
+//                    fontWeight = FontWeight.ExtraLight,
+                    fontSize = 32.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 ), modifier = Modifier
-                    .constrainAs(text) {
-                        top.linkTo(parent.top)
+                    .constrainAs(Name) {
+                        top.linkTo(parent.top, margin = 45.dp)
                         start.linkTo(parent.start)
 
                     }
@@ -144,7 +175,7 @@ fun Profile(navHostController: NavHostController){
                     contentDescription = "logo",
                     modifier = Modifier
                         .constrainAs(logo) {
-                            top.linkTo(parent.top)
+                            top.linkTo(Name.top)
                             end.linkTo(parent.end)
 
                         }
@@ -157,12 +188,11 @@ fun Profile(navHostController: NavHostController){
 
 
                 Text(text = SharedPref.getUserName(context), style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight= FontWeight.Light,
+                    fontSize = 14.sp,
                     color = Color.White
                 ), modifier = Modifier
                     .constrainAs(userName) {
-                        top.linkTo(text.bottom)
+                        top.linkTo(Name.bottom)
                         start.linkTo(parent.start)
                     }
                     .padding(start = 20.dp)
@@ -171,7 +201,8 @@ fun Profile(navHostController: NavHostController){
 
                 Text(text = SharedPref.getBio(context), style = TextStyle(
                     fontSize = 18.sp,
-                    color = Color.White
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium
                 ), modifier = Modifier
                     .constrainAs(bio) {
                         top.linkTo(userName.bottom)
@@ -182,71 +213,90 @@ fun Profile(navHostController: NavHostController){
                     .padding(bottom = 10.dp)
                 )
 
+
+                Image(
+                    painter = painterResource(id = R.drawable.follower_icon),
+                    contentDescription = "followers",
+                    modifier = Modifier
+                        .constrainAs(followericon) {
+                            top.linkTo(bio.bottom)
+                            start.linkTo(parent.start, margin = 20.dp)
+                        }
+                        .size(17.dp)
+
+                )
+
                 Text(text = "${followerList!!.size} Followers", style = TextStyle(
-                    fontSize = 18.sp,
-                    color = Color.LightGray
+                    fontSize = 16.sp,
+                    color = Color.White
                 ), modifier = Modifier
                     .constrainAs(followers) {
-                        top.linkTo(bio.bottom)
-                        start.linkTo(parent.start)
+                        top.linkTo(followericon.top)
+                        start.linkTo(followericon.start)
                     }
                     .padding(start = 20.dp)
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.follower_icon),
+                    contentDescription = "following",
+                    modifier = Modifier
+                        .constrainAs(followingicon) {
+                            top.linkTo(followericon.bottom, margin = 2.dp)
+                            start.linkTo(parent.start, margin = 20.dp)
+                        }
+                        .size(17.dp)
+
                 )
 
                 Text(text = "${followingList!!.size} Following", style = TextStyle(
-                    fontSize = 18.sp,
-                    color = Color.LightGray,
-                    fontWeight= FontWeight.ExtraLight
+                    fontSize = 16.sp,
+                    color = Color.White,
                     ), modifier = Modifier
                     .constrainAs(following) {
-                        top.linkTo(followers.bottom)
-                        start.linkTo(parent.start)
+                        top.linkTo(followingicon.top)
+                        start.linkTo(followingicon.start)
                     }
-                    .padding(top = 3.dp)
                     .padding(start = 20.dp)
                 )
 
-                ElevatedButton(onClick = {
-                    authViewModel.logout()
-                }, modifier = Modifier
-                    .constrainAs(button) {
-                        top.linkTo(following.bottom)
-                        start.linkTo(parent.start)
-                    }
-                    .padding(top = 15.dp)
-                    .padding(start = 20.dp),colors = ButtonDefaults.buttonColors(LightGreen))
-                {
-                    Text(text = "Log Out",style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Darkgreen
-                    ))
-                }
-
                 Divider(modifier = Modifier
                     .constrainAs(divider) {
-                        top.linkTo(button.bottom)
+                        top.linkTo(followingicon.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .padding(top = 20.dp),color = Color.DarkGray, thickness = 0.3.dp)
-
-
-
-
-
-
+                    .padding(top = 30.dp),color = Color.Transparent, thickness = 0.3.dp)
 
             }
         }
 
-      items(threads ?: emptyList()){pair ->
-        ThreadItem(
-            thread = pair,
-            users = user,
-            navHostController = navHostController,
-            userId = SharedPref.getUserName(context)
-        )
-    }
+
+        // Threads list section
+        item {
+            Box(
+                modifier = Modifier
+                    .height(25.dp)
+                    .fillMaxWidth()
+                    .background(
+                        Color.White,
+                        shape = RoundedCornerShape(
+                            topStart = 40.dp,
+                            topEnd = 40.dp
+                        )
+                    )
+            )
+        }
+
+        // Render threads in the LazyColumn as a list
+        items(threads ?: emptyList()) { pair ->
+            ThreadItem(
+                thread = pair,
+                users = user,
+                navHostController = navHostController,
+                userId = SharedPref.getUserName(context)
+            )
+        }
 
 
 
