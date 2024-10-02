@@ -2,6 +2,7 @@ package com.example.udyogsathi.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.view.ViewDebug.FlagToString
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +28,7 @@ class AuthViewModel: ViewModel() {
     val userRef = db.getReference("users")
 
     private val storageRef = Firebase.storage.reference
-    private val imageRef = storageRef.child("users/${UUID.randomUUID()}.jpg")
+   // private val imageRef = storageRef.child("users/${UUID.randomUUID()}.jpg")
     private val _firebaseUser = MutableLiveData<FirebaseUser>()
     val firebaseUser : LiveData<FirebaseUser> = _firebaseUser
 
@@ -56,7 +57,7 @@ class AuthViewModel: ViewModel() {
         userRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userData = snapshot.getValue(UserModel::class.java)
-                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio,userData!!.userType, userData!!.userName, userData!!.imageUrl,context)
+                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio,userData!!.userType,userData!!.qrImageUrl, userData!!.userName, userData!!.imageUrl,context)
 
             }
 
@@ -73,6 +74,7 @@ class AuthViewModel: ViewModel() {
         name: String,
         bio: String,
         userType:String,
+        qrImageUri: Uri,
         userName: String,
         imageUri: Uri,
         context: Context
@@ -81,7 +83,7 @@ class AuthViewModel: ViewModel() {
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _firebaseUser.postValue(auth.currentUser)
-                    saveImage(email,password,name,bio,userType,userName,imageUri,auth.currentUser?.uid, context )
+                    saveImage(email,password,name,bio,userType,qrImageUri,userName,imageUri,auth.currentUser?.uid, context )
                 }
                 else{
                     _error.postValue("Something went wrong.")
@@ -89,43 +91,77 @@ class AuthViewModel: ViewModel() {
             }
     }
 
-    private fun saveImage(email: String, password: String, name: String, bio: String,userType: String, userName: String, imageUri: Uri, uid: String?,context: Context) {
+    private fun saveImage(email: String, password: String, name: String, bio: String,userType: String,qrImageUri: Uri, userName: String, imageUri: Uri, uid: String?,context: Context) {
 
-        val uploadTask = imageRef.putFile(imageUri)
+        // Create a unique reference for the profile image
+        val profileImageRef = storageRef.child("users/${UUID.randomUUID()}.jpg")
+        val uploadTask = profileImageRef.putFile(imageUri)
+
         uploadTask.addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener {
-                saveData(email,password,name,bio,userType,userName,it.toString(),uid,context)
+            profileImageRef.downloadUrl.addOnSuccessListener {profileImageUrl ->
+                saveQrImage(email,password,name,bio,userType,qrImageUri,userName,profileImageUrl.toString(),auth.currentUser?.uid, context )
+//                saveData(email,password,name,bio,userType,userName,it.toString(),uid,context)
             }
         }
     }
 
-    private fun saveData(email: String, password: String, name: String, bio: String,userType: String, userName: String, toString: String, uid: String?,context: Context) {
+    private fun saveQrImage(
+        email: String,
+        password: String,
+        name: String,
+        bio: String,
+        userType: String,
+        qrImageUri: Uri,
+        userName: String,
+        profileImageUrl: String,
+        uid: String?,
+        context: Context
+    ) {
+        // Create a unique reference for the QR image
+        val qrImageRef = storageRef.child("users/qr_${UUID.randomUUID()}.jpg")
 
+        val uploadTask = qrImageRef.putFile(qrImageUri)
+        uploadTask.addOnSuccessListener {
+            qrImageRef.downloadUrl.addOnSuccessListener {qrImageUrl ->
 
+                saveData(email,password,name,bio,userType,userName,qrImageUrl.toString(),profileImageUrl,uid,context)
+            }
+        }
+    }
+
+    private fun saveData(
+        email: String,
+        password: String,
+        name: String,
+        bio: String,
+        userType: String,
+        userName: String,
+        qrImageUrl: String, // This is the correct variable name for the QR image URL
+        imageUrl: String, // This is the correct variable name for the profile image URL
+        uid: String?,
+        context: Context
+    ) {
         //Followers and Following
         val firestoreDb = Firebase.firestore
         val followersRef = firestoreDb.collection("followers").document(uid!!)
         val followingRef = firestoreDb.collection("following").document(uid!!)
 
-       // val likesRef = firestoreDb.collection("likes").document(uid!!)
-
         followingRef.set(mapOf("followingIds" to listOf<String>()))
         followersRef.set(mapOf("followersIds" to listOf<String>()))
-        //likesRef.set(mapOf("likesIds" to listOf<String>()))
 
-
-        val userData = UserModel(email,password,name,bio,userType,userName,toString,uid!!)
-        userRef.child(uid!!).setValue(userData)
+        // Create the UserModel with the correct parameters
+        val userData = UserModel(email, password, name, bio, userType,qrImageUrl , userName, imageUrl , uid!!)
+        userRef.child(uid).setValue(userData)
             .addOnSuccessListener {
-                SharedPref.storeData(name,email,bio,userType,userName,toString,context)
-                Toast.makeText(context,"Account created", Toast.LENGTH_SHORT).show()
+                SharedPref.storeData(name, email, bio, userType, userName, qrImageUrl, imageUrl, context)
+                Toast.makeText(context, "Account created", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(context, "Something went wrong, try again later", Toast.LENGTH_SHORT).show()
             }
-
     }
 
-      fun logout(){
+
+    fun logout(){
         auth.signOut()
         _firebaseUser.postValue(null)
     }

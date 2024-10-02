@@ -203,7 +203,7 @@ fun Profile(navHostController: NavHostController){
                     fontSize = 18.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Medium
-                ), modifier = Modifier
+                ), modifier = Modifier.width(250.dp)
                     .constrainAs(bio) {
                         top.linkTo(userName.bottom)
                         start.linkTo(parent.start)

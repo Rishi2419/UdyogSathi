@@ -97,6 +97,9 @@ fun Register(navHostController: NavHostController){
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
+    var qrImageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
 
 
     val authViewModel : AuthViewModel = viewModel()
@@ -113,6 +116,11 @@ fun Register(navHostController: NavHostController){
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
         uri : Uri? ->
         imageUri = uri
+    }
+
+    val launcher2 = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
+        uri : Uri? ->
+        qrImageUri = uri
     }
 
     val permissionLauncher =
@@ -203,23 +211,24 @@ fun Register(navHostController: NavHostController){
                             contentScale = ContentScale.Crop
                         )
                         Image(
-                            painter = painterResource(id = R.drawable.qrregister),
+                            painter = if (qrImageUri == null) painterResource(id = R.drawable.qrregister)
+                            else rememberAsyncImagePainter(model = qrImageUri),
                             contentDescription = "qrcode",
                             modifier = Modifier
                                 .size(35.dp)
                                 .clip(CircleShape)
-                                .background(Color.LightGray),
-//                            .clickable {
-//                                val isGranted = ContextCompat.checkSelfPermission(
-//                                    context, permissionToRequest
-//                                ) == PackageManager.PERMISSION_GRANTED
-//
-//                                if (isGranted) {
-//                                    launcher.launch("image/*")
-//                                } else {
-//                                    permissionLauncher.launch(permissionToRequest)
-//                                }
-//                            },
+                                .background(Color.LightGray)
+                                .clickable {
+                                val isGranted = ContextCompat.checkSelfPermission(
+                                    context, permissionToRequest
+                                ) == PackageManager.PERMISSION_GRANTED
+
+                                if (isGranted) {
+                                    launcher2.launch("image/*")
+                                } else {
+                                    permissionLauncher.launch(permissionToRequest)
+                                }
+                            },
                             contentScale = ContentScale.Crop
                         )
                     }
@@ -233,7 +242,7 @@ fun Register(navHostController: NavHostController){
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 
-                    Text(text = "You are a ?",
+                    Text(text = "Business type: ",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray,
@@ -426,6 +435,7 @@ fun Register(navHostController: NavHostController){
                                 name,
                                 bio,
                                 userType,
+                                qrImageUri!!,
                                 userName,
                                 imageUri!!,
                                 context

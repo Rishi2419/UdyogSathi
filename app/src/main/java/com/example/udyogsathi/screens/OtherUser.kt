@@ -292,7 +292,7 @@ fun OtherUsers(navHostController: NavHostController, uiD: String) {
                 }
 
                 ElevatedButton(onClick = {
-                    imageUrlToShow = users!!.imageUrl
+                    imageUrlToShow = users!!.qrImageUrl
                     showImageDialog = true
                 },
                     modifier = Modifier

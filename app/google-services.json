@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "671889084026",
+    "project_id": "udyogsathi-2fb93",
+    "storage_bucket": "udyogsathi-2fb93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671889084026:android:add881801cf0ccebd9b5c3",
+        "android_client_info": {
+          "package_name": "com.example.udyogsathi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg0XlnAkeLbJHFipYPWio0MiBbg2zquNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
