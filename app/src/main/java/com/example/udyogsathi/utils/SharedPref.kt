@@ -13,6 +13,8 @@ object SharedPref {
         qrImageUrl : String,
         userName: String,
         imageUrl: String,
+        latitude: String,
+        longitude : String,
         context: Context
     ) {
 
@@ -25,6 +27,8 @@ object SharedPref {
         editor.putString("qrImageUrl", qrImageUrl)
         editor.putString("userName", userName)
         editor.putString("imageUrl", imageUrl)
+        editor.putString("latitude", latitude)
+        editor.putString("longitude", longitude)
         editor.apply()
 
     }
@@ -62,6 +66,16 @@ object SharedPref {
     fun getImage(context: Context): String {
         val sharedPreferences = context.getSharedPreferences("users", MODE_PRIVATE)
         return sharedPreferences.getString("imageUrl", "")!!
+    }
+
+    fun getLat(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("users", MODE_PRIVATE)
+        return sharedPreferences.getString("latitude", "")!!
+    }
+
+    fun getLong(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("users", MODE_PRIVATE)
+        return sharedPreferences.getString("longitude", "")!!
     }
 
 

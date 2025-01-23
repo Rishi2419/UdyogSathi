@@ -1,6 +1,8 @@
 package com.example.udyogsathi.screens
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.net.Uri
 import androidx.compose.material3.RadioButton
 import android.os.Build
@@ -65,6 +67,7 @@ import com.example.udyogsathi.ui.theme.LightGreen
 import com.example.udyogsathi.ui.theme.retailer
 import com.example.udyogsathi.ui.theme.wholesaler
 import com.example.udyogsathi.viewmodel.AuthViewModel
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +91,14 @@ fun Register(navHostController: NavHostController){
     var loc  by remember {
         mutableStateOf("")
     }
+
+    var latitude by remember {
+        mutableStateOf("")
+    }
+    var longitude by remember {
+        mutableStateOf("")
+    }
+
 
     var selectedOption by remember { mutableStateOf("") }
     var userType by remember {
@@ -426,9 +437,17 @@ fun Register(navHostController: NavHostController){
             ) {
                 ElevatedButton(
                     onClick = {
+
                         if (name.isEmpty() || bio.isEmpty() || userType.isEmpty() || email.isEmpty() || password.isEmpty() || imageUri == null) {
                             Toast.makeText(context, "Please fill all details", Toast.LENGTH_SHORT).show()
                         } else {
+                            val result = convertAddressToLatLong(context, loc.toString())
+                            if (result != null) {
+                                latitude = result.first.toString()
+                                longitude = result.second.toString()
+                            } else {
+                                Toast.makeText(context, "Unable to find location", Toast.LENGTH_SHORT).show()
+                            }
                             authViewModel.register(
                                 email,
                                 password,
@@ -438,6 +457,8 @@ fun Register(navHostController: NavHostController){
                                 qrImageUri!!,
                                 userName,
                                 imageUri!!,
+                                latitude,
+                                longitude,
                                 context
                             )
                         }
@@ -483,8 +504,21 @@ fun Register(navHostController: NavHostController){
 
 }
 
-
-
+fun convertAddressToLatLong(context: Context, address: String): Pair<Double, Double>? {
+    return try {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addresses = geocoder.getFromLocationName(address, 1)
+        if (addresses != null && addresses.isNotEmpty()) {
+            val location = addresses[0]
+            Pair(location.latitude, location.longitude)
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
 
 
 @Preview(showBackground = true)

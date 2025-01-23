@@ -67,6 +67,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.udyogsathi.R
 import com.example.udyogsathi.ui.theme.Darkgreen
+import com.example.udyogsathi.ui.theme.Gradient1
 import com.example.udyogsathi.ui.theme.Gradient2
 import com.example.udyogsathi.ui.theme.Gradient3
 import com.example.udyogsathi.ui.theme.UdyogSathiTheme
@@ -217,10 +218,11 @@ fun ChatBot(navHostController: NavHostController) {
 
                     TextField(
                         modifier = Modifier
+                            .height(50.dp)
                             .weight(1f)
                             .background(Color.Transparent)
                             .clip(RoundedCornerShape(30.dp))
-                            .padding(4.dp),
+                            .padding(1.dp),
                         value = chatState.prompt,
                         onValueChange = { chaViewModel.onEvent(ChatUiEvent.UpdatePrompt(it)) },
                         placeholder = {
@@ -230,7 +232,7 @@ fun ChatBot(navHostController: NavHostController) {
                                 fontSize = 16.sp
                             )
                         },
-                        textStyle = TextStyle(color = Darkgreen, fontSize = 16.sp),
+                        textStyle = TextStyle(color = Color.White, fontSize = 20.sp),
                         shape = RoundedCornerShape(30.dp),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.LightGray,

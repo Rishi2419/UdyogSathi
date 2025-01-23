@@ -104,4 +104,13 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer:2.18.1")
     // Jetpack Compose Foundation
     implementation ("androidx.compose.foundation:foundation:1.5.0")
+
+    //socket IO
+    implementation ("io.socket:socket.io-client:2.1.0") // Or latest version
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+
 }

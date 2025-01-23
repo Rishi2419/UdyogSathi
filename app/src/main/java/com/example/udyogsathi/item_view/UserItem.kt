@@ -45,7 +45,6 @@ fun UserItem(
 
                 .background(Color.White)
                 .clickable {
-
                     val routes = Routes.OtherUsers.routes.replace("{data}",users.uid)
                     navHostController.navigate(routes)
                 }

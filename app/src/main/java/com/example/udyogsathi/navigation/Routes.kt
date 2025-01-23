@@ -3,7 +3,7 @@ package com.example.udyogsathi.navigation
 sealed class Routes(val routes:String){
 
     object Home : Routes("home")
-    object Notification : Routes("notification")
+    object Location : Routes("location")
     object Profile : Routes("profile")
     object Search : Routes("search")
     object Splash : Routes("splash")
@@ -14,6 +14,10 @@ sealed class Routes(val routes:String){
     object OtherUsers : Routes("register/{data}")
 
     object ChatBot : Routes("chatbot")
+
+    object UserList : Routes("userList")
+    object Chat : Routes("chat/{senderId}/{receiverId}/{receiverName}")
+
 
     object Splash2 : Routes("splash2")
 }

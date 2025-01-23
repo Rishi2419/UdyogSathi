@@ -57,7 +57,7 @@ class AuthViewModel: ViewModel() {
         userRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userData = snapshot.getValue(UserModel::class.java)
-                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio,userData!!.userType,userData!!.qrImageUrl, userData!!.userName, userData!!.imageUrl,context)
+                SharedPref.storeData(userData!!.name, userData!!.email, userData!!.bio,userData!!.userType,userData!!.qrImageUrl, userData!!.userName, userData!!.imageUrl, userData!!.latitude,userData!!.longitude,context)
 
             }
 
@@ -77,13 +77,15 @@ class AuthViewModel: ViewModel() {
         qrImageUri: Uri,
         userName: String,
         imageUri: Uri,
+        latitude: String,
+        longitude : String,
         context: Context
     ){
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _firebaseUser.postValue(auth.currentUser)
-                    saveImage(email,password,name,bio,userType,qrImageUri,userName,imageUri,auth.currentUser?.uid, context )
+                    saveImage(email,password,name,bio,userType,qrImageUri,userName,imageUri,auth.currentUser?.uid,latitude,longitude,context )
                 }
                 else{
                     _error.postValue("Something went wrong.")
@@ -91,7 +93,7 @@ class AuthViewModel: ViewModel() {
             }
     }
 
-    private fun saveImage(email: String, password: String, name: String, bio: String,userType: String,qrImageUri: Uri, userName: String, imageUri: Uri, uid: String?,context: Context) {
+    private fun saveImage(email: String, password: String, name: String, bio: String,userType: String,qrImageUri: Uri, userName: String, imageUri: Uri, uid: String?,latitude: String,longitude: String,context: Context) {
 
         // Create a unique reference for the profile image
         val profileImageRef = storageRef.child("users/${UUID.randomUUID()}.jpg")
@@ -99,7 +101,7 @@ class AuthViewModel: ViewModel() {
 
         uploadTask.addOnSuccessListener {
             profileImageRef.downloadUrl.addOnSuccessListener {profileImageUrl ->
-                saveQrImage(email,password,name,bio,userType,qrImageUri,userName,profileImageUrl.toString(),auth.currentUser?.uid, context )
+                saveQrImage(email,password,name,bio,userType,qrImageUri,userName,profileImageUrl.toString(),auth.currentUser?.uid,latitude,longitude, context )
 //                saveData(email,password,name,bio,userType,userName,it.toString(),uid,context)
             }
         }
@@ -115,6 +117,8 @@ class AuthViewModel: ViewModel() {
         userName: String,
         profileImageUrl: String,
         uid: String?,
+        latitude: String,
+        longitude : String,
         context: Context
     ) {
         // Create a unique reference for the QR image
@@ -124,7 +128,7 @@ class AuthViewModel: ViewModel() {
         uploadTask.addOnSuccessListener {
             qrImageRef.downloadUrl.addOnSuccessListener {qrImageUrl ->
 
-                saveData(email,password,name,bio,userType,userName,qrImageUrl.toString(),profileImageUrl,uid,context)
+                saveData(email,password,name,bio,userType,userName,qrImageUrl.toString(),profileImageUrl,uid,latitude,longitude,context)
             }
         }
     }
@@ -139,6 +143,8 @@ class AuthViewModel: ViewModel() {
         qrImageUrl: String, // This is the correct variable name for the QR image URL
         imageUrl: String, // This is the correct variable name for the profile image URL
         uid: String?,
+        latitude: String,
+        longitude : String,
         context: Context
     ) {
         //Followers and Following
@@ -150,10 +156,10 @@ class AuthViewModel: ViewModel() {
         followersRef.set(mapOf("followersIds" to listOf<String>()))
 
         // Create the UserModel with the correct parameters
-        val userData = UserModel(email, password, name, bio, userType,qrImageUrl , userName, imageUrl , uid!!)
+        val userData = UserModel(email, password, name, bio, userType,qrImageUrl , userName, imageUrl , uid!!,latitude,longitude)
         userRef.child(uid).setValue(userData)
             .addOnSuccessListener {
-                SharedPref.storeData(name, email, bio, userType, userName, qrImageUrl, imageUrl, context)
+                SharedPref.storeData(name, email, bio, userType, qrImageUrl,userName, imageUrl, latitude, longitude, context)
                 Toast.makeText(context, "Account created", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(context, "Something went wrong, try again later", Toast.LENGTH_SHORT).show()

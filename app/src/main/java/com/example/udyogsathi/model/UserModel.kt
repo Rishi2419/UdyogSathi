@@ -9,5 +9,7 @@ data class UserModel(
     val qrImageUrl: String = "",
    val userName: String = "",
    val imageUrl: String = "",
-   val uid: String = ""
+   val uid: String = "",
+    val latitude: String = "",
+    val longitude: String = ""
 )

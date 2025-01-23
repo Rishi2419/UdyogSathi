@@ -69,8 +69,8 @@ fun BottomNav(navHostController: NavHostController) {
             composable(Routes.Home.routes){
                 Home(navHostController)
             }
-            composable(Routes.Notification.routes){
-                Notification(navHostController)
+            composable(Routes.Location.routes){
+                Location(navHostController)
             }
             composable(Routes.Search.routes){
                 Search(navHostController)
@@ -134,8 +134,8 @@ fun MyBottomBar(navController1: NavHostController) {
                         Color.White
                     ),
                     BottomNavItem(
-                        "Notification",
-                        Routes.Notification.routes,
+                        "Location",
+                        Routes.Location.routes,
                         Icons.Rounded.LocationOn,
                         Color.White
                     ),
