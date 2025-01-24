@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">UdyogSathi</string>
-    <string name="google_map_api_key">AIzaSyB27EhQXl5gOlwTHbCA2jo4mhHLWmkob6E</string>
+    <string name="google_map_api_key">YOUR API KEY</string>
 </resources>
