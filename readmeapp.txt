@@ -1,3 +1,31 @@
+private fun loadDeletedPhotos() {
+        val deletedPhotoList = mutableListOf<Uri>()
+        val currentTime = System.currentTimeMillis()
+        
+        // Directories to scan for recently deleted files
+        val dirsToScan = listOf(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+            File(Environment.getExternalStorageDirectory(), "Android/data/com.miui.gallery/files/trash")
+        )
+
+        val imageExtensions = listOf("jpg", "jpeg", "png", "gif", "bmp")
+
+        dirsToScan.forEach { directory ->
+            directory.walkTopDown()
+                .filter { file ->
+                    file.isFile && 
+                    imageExtensions.any { ext -> file.name.lowercase().endsWith(ext) } &&
+                    // Files deleted within last 7 days
+                    currentTime - file.lastModified() <= TimeUnit.DAYS.toMillis(7)
+                }
+                .forEach { deletedFile ->
+                    deletedPhotoList.add(Uri.fromFile(deletedFile))
+                }
+        }
+
+
+
 
     <!-- For Android 13 (API level 33) and above -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
