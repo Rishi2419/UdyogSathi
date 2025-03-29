@@ -4,8 +4,6 @@ Connecting Wholesalers and Retailers for Seamless Communication and Business Gro
 ## Overview
 UdyogSathi is a cutting-edge app designed to empower micro and small enterprises by bridging the gap between wholesalers and retailers. With advanced features like real-time communication, AI integration, and location-based services, UdyogSathi simplifies business interactions and fosters growth.
 
-This app is being developed as part of a final-year project and is currently 90% complete.
-
 ## Features
 ### Posts:
 Users can create and share posts to showcase products and updates.
